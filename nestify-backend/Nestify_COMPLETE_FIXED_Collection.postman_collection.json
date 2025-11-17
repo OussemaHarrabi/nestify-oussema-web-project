@@ -1,0 +1,837 @@
+{
+  "info": {
+    "_postman_id": "nestify-2024-complete-fixed",
+    "name": "🚀 Nestify 2024 - COMPLETE & FIXED API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "✅ FULLY TESTED & WORKING - Complete API collection for Nestify real estate backend with ALL FIXES APPLIED. Ready for production use with French property types, role-based access, and database schema fixes."
+  },
+  "item": [
+    {
+      "name": "🔐 Authentication",
+      "item": [
+        {
+          "name": "Register Client User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Registration successful', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "if(jsonData.token){ ",
+                  "    pm.environment.set('client_token', jsonData.token);",
+                  "    console.log('Client token saved: ' + jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Ahmed Client\",\n    \"email\": \"ahmed.client@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"phone\": \"+216 12345678\",\n    \"user_type\": \"client\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "register"]
+            }
+          }
+        },
+        {
+          "name": "Register Agency User ✅ FIXED",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Registration successful', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "if(jsonData.token){ ",
+                  "    pm.environment.set('agency_token', jsonData.token);",
+                  "    console.log('Agency token saved: ' + jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Agence Immobiliere Tunis\",\n    \"email\": \"agence@tunis-immo.tn\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"phone\": \"+216 71234567\",\n    \"user_type\": \"agency\",\n    \"company_name\": \"Agence Immobiliere Tunis SARL\",\n    \"website\": \"https://tunis-immo.tn\",\n    \"description\": \"Leading real estate agency specializing in residential and commercial properties in Tunis and surrounding areas.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login successful', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "if(jsonData.token){ ",
+                  "    pm.environment.set('admin_token', jsonData.token);",
+                  "    console.log('Admin token saved: ' + jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@nestify.tn\",\n    \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Agency User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login successful', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "if(jsonData.token){ ",
+                  "    pm.environment.set('agency_token', jsonData.token);",
+                  "    console.log('Agency token saved: ' + jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"contact@belkacem-immo.tn\",\n    \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login Client User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login successful', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "if(jsonData.token){ ",
+                  "    pm.environment.set('client_token', jsonData.token);",
+                  "    console.log('Client token saved: ' + jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"client1@example.com\",\n    \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "login"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏠 Properties (Public) ✅ ALL FIXED",
+      "description": "Public endpoints - no authentication required. All search, filter, and suggestions fixed!",
+      "item": [
+        {
+          "name": "Get All Properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/properties",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties"]
+            }
+          }
+        },
+        {
+          "name": "Search Properties ✅ BULLETPROOF",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/properties/search?query=Tunis",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties", "search"],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "Tunis",
+                  "description": "Search in title, description, city, address"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter Properties ✅ SIMPLE & WORKING",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/properties/filter?type=Appartement&min_price=100000&max_price=500000&city=Tunis",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties", "filter"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "Appartement",
+                  "description": "French property type"
+                },
+                {
+                  "key": "min_price",
+                  "value": "100000"
+                },
+                {
+                  "key": "max_price",
+                  "value": "500000"
+                },
+                {
+                  "key": "city",
+                  "value": "Tunis",
+                  "description": "Real city from database"
+                },
+                {
+                  "key": "min_surface",
+                  "value": "50",
+                  "disabled": true,
+                  "description": "Minimum surface area"
+                },
+                {
+                  "key": "max_surface",
+                  "value": "200",
+                  "disabled": true,
+                  "description": "Maximum surface area"
+                },
+                {
+                  "key": "bedrooms",
+                  "value": "2",
+                  "disabled": true,
+                  "description": "Minimum bedrooms"
+                },
+                {
+                  "key": "bathrooms",
+                  "value": "1",
+                  "disabled": true,
+                  "description": "Minimum bathrooms"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Search Suggestions ✅ REAL DATA",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/properties/suggestions?query=Tu",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties", "suggestions"],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "Tu",
+                  "description": "Get suggestions from real database"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Property Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/properties/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Real Locations & Types ✅ FROM DATABASE",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/properties/locations",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties", "locations"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛡️ Protected Endpoints (Client) ✅ FIXED",
+      "description": "Endpoints requiring client authentication - Favorites CRUD fixed!",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{client_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/user",
+              "host": ["{{base_url}}"],
+              "path": ["api", "user"]
+            }
+          }
+        },
+        {
+          "name": "Add to Favorites ✅ FIXED",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{client_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"property_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/favorites",
+              "host": ["{{base_url}}"],
+              "path": ["api", "favorites"]
+            }
+          }
+        },
+        {
+          "name": "Get My Favorites",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{client_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/favorites",
+              "host": ["{{base_url}}"],
+              "path": ["api", "favorites"]
+            }
+          }
+        },
+        {
+          "name": "Remove from Favorites ✅ FIXED",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{client_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/favorites/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "favorites", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏢 Agency Endpoints ✅ FIXED",
+      "description": "Endpoints for agency users - French property types & image upload working!",
+      "item": [
+        {
+          "name": "Get My Properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agency_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/my-properties",
+              "host": ["{{base_url}}"],
+              "path": ["api", "my-properties"]
+            }
+          }
+        },
+        {
+          "name": "Create Property ✅ FIXED (French Types)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agency_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Appartement Moderne Centre-Ville Tunis\",\n    \"description\": \"Magnifique appartement de 3 chambres avec vue imprenable sur la ville, situé au cœur de Tunis. Proche des transports et commerces.\",\n    \"price\": 450000,\n    \"type\": \"Appartement\",\n    \"surface\": 120,\n    \"bedrooms\": 3,\n    \"bathrooms\": 2,\n    \"rooms\": 4,\n    \"address\": \"Avenue Bourguiba, Centre-Ville\",\n    \"city\": \"Tunis\",\n    \"district\": \"Centre-Ville\",\n    \"latitude\": 36.8065,\n    \"longitude\": 10.1815,\n    \"features\": [\"parking\", \"balcon\", \"ascenseur\", \"climatisation\"],\n    \"parking\": true,\n    \"elevator\": true,\n    \"terrace\": false,\n    \"garden\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/properties",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties"]
+            }
+          }
+        },
+        {
+          "name": "Upload Property Image ✅ WORKING",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agency_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "property_id",
+                  "value": "1",
+                  "type": "text",
+                  "description": "ID of the property to upload image for"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "",
+                  "description": "Select an image file (JPG, PNG, max 5MB)"
+                },
+                {
+                  "key": "is_primary",
+                  "value": "true",
+                  "type": "text",
+                  "description": "Set to true for main property image"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/properties/upload-image",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties", "upload-image"]
+            }
+          }
+        },
+        {
+          "name": "Update Property",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agency_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Updated Property Title\",\n    \"price\": 480000,\n    \"description\": \"Updated description with more details\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/properties/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Property",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agency_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/properties/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "properties", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👑 Admin Endpoints ✅ ALL FIXED",
+      "description": "Admin-only endpoints - Dashboard & management working perfectly!",
+      "item": [
+        {
+          "name": "Admin Dashboard ✅ FIXED",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "dashboard"]
+            }
+          }
+        },
+        {
+          "name": "Get All Users ✅ FIXED",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "users"]
+            }
+          }
+        },
+        {
+          "name": "Get All Properties (Admin) ✅ FIXED",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/properties",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "properties"]
+            }
+          }
+        },
+        {
+          "name": "Toggle Property Status ✅ FIXED",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"is_active\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/admin/properties/1/toggle-status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "properties", "1", "toggle-status"]
+            }
+          }
+        },
+        {
+          "name": "Delete User ✅ FIXED",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/users/2",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "users", "2"]
+            }
+          }
+        },
+        {
+          "name": "Delete Property (Admin) ✅ FIXED",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/admin/properties/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "admin", "properties", "1"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ]
+}

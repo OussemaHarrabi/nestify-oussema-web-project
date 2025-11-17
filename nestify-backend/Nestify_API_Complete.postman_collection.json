@@ -1,0 +1,1022 @@
+{
+  "info": {
+    "name": "Nestify Real Estate API - Complete",
+    "description": "Complete API collection for Nestify.tn - Tunisia's first PropTech marketplace for new construction real estate",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "2.0.0"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "property_id",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 Authentication",
+      "description": "User authentication and authorization endpoints",
+      "item": [
+        {
+          "name": "Register Agency",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has user data and token', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('user');",
+                  "    pm.expect(jsonData).to.have.property('token');",
+                  "    pm.expect(jsonData.user).to.have.property('user_type', 'agency');",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('token', response.token);",
+                  "    pm.environment.set('user_id', response.user.id);",
+                  "    console.log('Agency registered and logged in successfully');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Premium Real Estate Agency\",\n    \"email\": \"premium@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"phone\": \"+216 12345678\",\n    \"user_type\": \"agency\",\n    \"company_name\": \"Premium Real Estate Agency\",\n    \"website\": \"https://premium-estate.com\",\n    \"description\": \"Leading real estate agency in Tunisia\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": ["{{base_url}}"],
+              "path": ["register"]
+            },
+            "description": "Register a new agency user with complete profile information"
+          }
+        },
+        {
+          "name": "Register Client",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has user data and token', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('user');",
+                  "    pm.expect(jsonData).to.have.property('token');",
+                  "    pm.expect(jsonData.user).to.have.property('user_type', 'client');",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('token', response.token);",
+                  "    pm.environment.set('user_id', response.user.id);",
+                  "    console.log('Client registered and logged in successfully');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Ahmed Ben Ali\",\n    \"email\": \"ahmed@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"phone\": \"+216 98765432\",\n    \"user_type\": \"client\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": ["{{base_url}}"],
+              "path": ["register"]
+            },
+            "description": "Register a new client user"
+          }
+        },
+        {
+          "name": "Login Agency",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has token and user data', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('token');",
+                  "    pm.expect(jsonData).to.have.property('user');",
+                  "    pm.expect(jsonData.user).to.have.property('user_type', 'agency');",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('token', response.token);",
+                  "    pm.environment.set('user_id', response.user.id);",
+                  "    console.log('Agency logged in successfully');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"contact@belkacem-immo.tn\",\n    \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": ["{{base_url}}"],
+              "path": ["login"]
+            },
+            "description": "Login with existing agency credentials"
+          }
+        },
+        {
+          "name": "Login Client",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('token', response.token);",
+                  "    pm.environment.set('user_id', response.user.id);",
+                  "    console.log('Client logged in successfully');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"client1@example.com\",\n    \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": ["{{base_url}}"],
+              "path": ["login"]
+            },
+            "description": "Login with existing client credentials"
+          }
+        },
+        {
+          "name": "Get Current User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has user data', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('id');",
+                  "    pm.expect(jsonData).to.have.property('email');",
+                  "    pm.expect(jsonData).to.have.property('user_type');",
+                  "});",
+                  "",
+                  "console.log('Current user:', pm.response.json().name);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user",
+              "host": ["{{base_url}}"],
+              "path": ["user"]
+            },
+            "description": "Get current authenticated user information"
+          }
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has logout message', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('message');",
+                  "});",
+                  "",
+                  "// Clear token after logout",
+                  "pm.environment.set('token', '');",
+                  "pm.environment.set('user_id', '');",
+                  "console.log('User logged out successfully');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/logout",
+              "host": ["{{base_url}}"],
+              "path": ["logout"]
+            },
+            "description": "Logout current user and invalidate token"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏠 Properties - Basic Operations",
+      "description": "Basic property CRUD operations and management",
+      "item": [
+        {
+          "name": "Get All Properties",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has data array', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "    pm.expect(jsonData.data).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Response has pagination', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('pagination');",
+                  "    pm.expect(jsonData.pagination).to.have.property('current_page');",
+                  "    pm.expect(jsonData.pagination).to.have.property('total');",
+                  "});",
+                  "",
+                  "// Save first property ID for other tests",
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data.length > 0) {",
+                  "        pm.environment.set('property_id', response.data[0]._id.replace('nestify_', ''));",
+                  "        console.log('Found ' + response.data.length + ' properties');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties",
+              "host": ["{{base_url}}"],
+              "path": ["properties"]
+            },
+            "description": "Get all validated properties with basic pagination"
+          }
+        },
+        {
+          "name": "Get Single Property",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has property data', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('_id');",
+                  "    pm.expect(jsonData).to.have.property('title');",
+                  "    pm.expect(jsonData).to.have.property('price');",
+                  "    pm.expect(jsonData).to.have.property('type');",
+                  "});",
+                  "",
+                  "console.log('Property details loaded:', pm.response.json().title);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/{{property_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "{{property_id}}"]
+            },
+            "description": "Get single property by ID (increments view count)"
+          }
+        },
+        {
+          "name": "Create Property",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('Response has property data', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('property');",
+                  "    pm.expect(jsonData.property).to.have.property('title');",
+                  "    pm.expect(jsonData.property).to.have.property('price');",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('new_property_id', response.property.id);",
+                  "    console.log('Property created successfully:', response.property.title);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Appartement moderne à Tunis Centre\",\n    \"description\": \"Magnifique appartement moderne situé au cœur de Tunis avec vue sur la mer. Proche de tous les commodités, transport en commun, écoles et centres commerciaux.\",\n    \"price\": 280000,\n    \"type\": \"Appartement\",\n    \"surface\": 95,\n    \"city\": \"Tunis\",\n    \"district\": \"Centre Ville\",\n    \"address\": \"Avenue Habib Bourguiba\",\n    \"latitude\": 36.8065,\n    \"longitude\": 10.1815,\n    \"rooms\": 4,\n    \"bedrooms\": 3,\n    \"bathrooms\": 2,\n    \"floor\": 3,\n    \"total_floors\": 8,\n    \"parking\": true,\n    \"elevator\": true,\n    \"terrace\": true,\n    \"garden\": false,\n    \"features\": [\"Climatisation\", \"Cuisine équipée\", \"Garage\", \"Sécurité\"],\n    \"is_vefa\": false,\n    \"images\": [\n        \"https://via.placeholder.com/800x600/4F46E5/FFFFFF?text=Appartement+Tunis\"\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/properties",
+              "host": ["{{base_url}}"],
+              "path": ["properties"]
+            },
+            "description": "Create a new property (requires authentication)"
+          }
+        },
+        {
+          "name": "Update Property",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has updated property', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('property');",
+                  "    pm.expect(jsonData.property).to.have.property('title');",
+                  "});",
+                  "",
+                  "console.log('Property updated successfully');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Appartement moderne à Tunis Centre - MISE À JOUR\",\n    \"price\": 290000,\n    \"description\": \"Description mise à jour avec plus de détails sur cette magnifique propriété.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/properties/{{new_property_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "{{new_property_id}}"]
+            },
+            "description": "Update property (owner or admin only)"
+          }
+        },
+        {
+          "name": "Get My Properties",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has data array', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "    pm.expect(jsonData.data).to.be.an('array');",
+                  "});",
+                  "",
+                  "console.log('My properties count:', pm.response.json().data.length);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/my-properties",
+              "host": ["{{base_url}}"],
+              "path": ["my-properties"]
+            },
+            "description": "Get current user's properties"
+          }
+        },
+        {
+          "name": "Delete Property",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has success message', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('message');",
+                  "});",
+                  "",
+                  "console.log('Property deleted successfully');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/{{new_property_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "{{new_property_id}}"]
+            },
+            "description": "Delete property (owner or admin only)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔍 Properties - Advanced Filtering",
+      "description": "Advanced property search and filtering capabilities",
+      "item": [
+        {
+          "name": "Search by Text",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains filters_applied', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('filters_applied');",
+                  "});",
+                  "",
+                  "console.log('Search results for \"appartement\":', pm.response.json().data.length, 'properties');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?search=appartement",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "appartement"
+                }
+              ]
+            },
+            "description": "Search properties by text in title, description, city, district, or address"
+          }
+        },
+        {
+          "name": "Filter by Price Range",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?min_price=100000&max_price=500000",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "min_price",
+                  "value": "100000"
+                },
+                {
+                  "key": "max_price",
+                  "value": "500000"
+                }
+              ]
+            },
+            "description": "Filter properties by price range"
+          }
+        },
+        {
+          "name": "Filter by Property Type",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?type=Appartement",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "Appartement"
+                }
+              ]
+            },
+            "description": "Filter by single property type"
+          }
+        },
+        {
+          "name": "Filter by Multiple Types",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?type[]=Appartement&type[]=Villa",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "type[]",
+                  "value": "Appartement"
+                },
+                {
+                  "key": "type[]",
+                  "value": "Villa"
+                }
+              ]
+            },
+            "description": "Filter by multiple property types"
+          }
+        },
+        {
+          "name": "Filter by Bedrooms",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?min_bedrooms=2&max_bedrooms=4",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "min_bedrooms",
+                  "value": "2"
+                },
+                {
+                  "key": "max_bedrooms",
+                  "value": "4"
+                }
+              ]
+            },
+            "description": "Filter by bedroom count range"
+          }
+        },
+        {
+          "name": "Filter by Location",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?city=Sousse&district=Sahloul",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "city",
+                  "value": "Sousse"
+                },
+                {
+                  "key": "district",
+                  "value": "Sahloul"
+                }
+              ]
+            },
+            "description": "Filter by city and district"
+          }
+        },
+        {
+          "name": "Filter by Basic Features",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?parking=1&elevator=1&terrace=1",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "parking",
+                  "value": "1"
+                },
+                {
+                  "key": "elevator",
+                  "value": "1"
+                },
+                {
+                  "key": "terrace",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Filter by basic property features"
+          }
+        },
+        {
+          "name": "Filter by Premium Features",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?piscine=1&garage=1&climatisation=1",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "piscine",
+                  "value": "1"
+                },
+                {
+                  "key": "garage",
+                  "value": "1"
+                },
+                {
+                  "key": "climatisation",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Filter by premium features (pool, garage, AC)"
+          }
+        },
+        {
+          "name": "Complex Luxury Search",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?type=Appartement&city=Sousse&min_price=300000&min_bedrooms=3&piscine=1&garage=1&climatisation=1&sort_by=price&sort_order=desc",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "Appartement"
+                },
+                {
+                  "key": "city",
+                  "value": "Sousse"
+                },
+                {
+                  "key": "min_price",
+                  "value": "300000"
+                },
+                {
+                  "key": "min_bedrooms",
+                  "value": "3"
+                },
+                {
+                  "key": "piscine",
+                  "value": "1"
+                },
+                {
+                  "key": "garage",
+                  "value": "1"
+                },
+                {
+                  "key": "climatisation",
+                  "value": "1"
+                },
+                {
+                  "key": "sort_by",
+                  "value": "price"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "desc"
+                }
+              ]
+            },
+            "description": "Complex search: Luxury apartments in Sousse with premium features"
+          }
+        },
+        {
+          "name": "Sort by Price Ascending",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?sort_by=price&sort_order=asc",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "sort_by",
+                  "value": "price"
+                },
+                {
+                  "key": "sort_order",
+                  "value": "asc"
+                }
+              ]
+            },
+            "description": "Sort properties by price (lowest first)"
+          }
+        },
+        {
+          "name": "Custom Pagination",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?per_page=20&page=1",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "20"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Custom pagination: 20 results per page"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global pre-request script",
+          "console.log('Making request to: ' + pm.request.url);",
+          "if (pm.environment.get('token')) {",
+          "    console.log('Using token: ' + pm.environment.get('token').substring(0, 20) + '...');",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test script",
+          "pm.test('Response time is reasonable', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});",
+          "",
+          "pm.test('Content type is JSON', function () {",
+          "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+          "});",
+          "",
+          "// Log response for debugging",
+          "if (pm.response.code >= 400) {",
+          "    console.log('Error response:', pm.response.json());",
+          "}"
+        ]
+      }
+    }
+  ]
+}

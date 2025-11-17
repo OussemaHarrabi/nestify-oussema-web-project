@@ -1,0 +1,1378 @@
+{
+  "info": {
+    "name": "Nestify Real Estate API - Complete Collection",
+    "description": "Complete API collection for Nestify real estate platform with three user types: regular users, agencies, and admins. Includes authentication, property management, user management, analytics, and more.",
+    "version": "2.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000/api",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "🔐 Admin Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('auth_token', response.token);",
+                  "    pm.collectionVariables.set('user_type', 'admin');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@test.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": ["{{base_url}}"],
+              "path": ["login"]
+            },
+            "description": "Login as admin user - automatically sets auth token"
+          }
+        },
+        {
+          "name": "🏢 Agency Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('auth_token', response.token);",
+                  "    pm.collectionVariables.set('user_type', 'agency');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"agency@test.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": ["{{base_url}}"],
+              "path": ["login"]
+            },
+            "description": "Login as agency user - automatically sets auth token"
+          }
+        },
+        {
+          "name": "👤 Regular User Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('auth_token', response.token);",
+                  "    pm.collectionVariables.set('user_type', 'regular_user');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"regular@test.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": ["{{base_url}}"],
+              "path": ["login"]
+            },
+            "description": "Login as regular user - automatically sets auth token"
+          }
+        },
+        {
+          "name": "Register New Regular User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"user_type\": \"regular_user\",\n    \"phone\": \"+1234567890\",\n    \"city\": \"Tunis\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": ["{{base_url}}"],
+              "path": ["register"]
+            },
+            "description": "Register a new regular user"
+          }
+        },
+        {
+          "name": "Register New Agency User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Agency Manager\",\n    \"email\": \"newagency@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"user_type\": \"agency\",\n    \"phone\": \"+21612345678\",\n    \"city\": \"Tunis\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": ["{{base_url}}"],
+              "path": ["register"]
+            },
+            "description": "Register a new agency user"
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user",
+              "host": ["{{base_url}}"],
+              "path": ["user"]
+            },
+            "description": "Get current authenticated user information"
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Name\",\n    \"phone\": \"+1234567890\",\n    \"bio\": \"Updated bio\",\n    \"city\": \"Tunis\",\n    \"address\": \"123 Main St\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/profile",
+              "host": ["{{base_url}}"],
+              "path": ["profile"]
+            },
+            "description": "Update user profile information"
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"current_password\": \"current_password\",\n    \"new_password\": \"new_password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/change-password",
+              "host": ["{{base_url}}"],
+              "path": ["change-password"]
+            },
+            "description": "Change user password"
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/logout",
+              "host": ["{{base_url}}"],
+              "path": ["logout"]
+            },
+            "description": "Logout current session"
+          }
+        },
+        {
+          "name": "Logout All Sessions",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/logout-all",
+              "host": ["{{base_url}}"],
+              "path": ["logout-all"]
+            },
+            "description": "Logout from all sessions"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Properties (Public)",
+      "item": [
+        {
+          "name": "Get All Properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?page=1&per_page=20&sort_by=price&sort_direction=asc",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "20"
+                },
+                {
+                  "key": "sort_by",
+                  "value": "price"
+                },
+                {
+                  "key": "sort_direction",
+                  "value": "asc"
+                }
+              ]
+            },
+            "description": "Get paginated list of all properties with optional sorting"
+          }
+        },
+        {
+          "name": "Get Property by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/1",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "1"]
+            },
+            "description": "Get detailed information about a specific property"
+          }
+        },
+        {
+          "name": "Search Properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/search?query=villa&location=Tunis&min_price=100000&max_price=500000",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "search"],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "villa"
+                },
+                {
+                  "key": "location",
+                  "value": "Tunis"
+                },
+                {
+                  "key": "min_price",
+                  "value": "100000"
+                },
+                {
+                  "key": "max_price",
+                  "value": "500000"
+                }
+              ]
+            },
+            "description": "Search properties by query, location, and price range"
+          }
+        },
+        {
+          "name": "Filter Properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/filter?type=Villa&bedrooms=3&bathrooms=2&area_min=150&area_max=300",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "filter"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "Villa"
+                },
+                {
+                  "key": "bedrooms",
+                  "value": "3"
+                },
+                {
+                  "key": "bathrooms",
+                  "value": "2"
+                },
+                {
+                  "key": "area_min",
+                  "value": "150"
+                },
+                {
+                  "key": "area_max",
+                  "value": "300"
+                }
+              ]
+            },
+            "description": "Filter properties by specific criteria"
+          }
+        },
+        {
+          "name": "Get Search Suggestions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/suggestions?query=vil",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "suggestions"],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "vil"
+                }
+              ]
+            },
+            "description": "Get search suggestions for autocomplete"
+          }
+        },
+        {
+          "name": "Get Locations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/locations",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "locations"]
+            },
+            "description": "Get available locations for property filtering"
+          }
+        },
+        {
+          "name": "Get Filter Options",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/filter-options",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "filter-options"]
+            },
+            "description": "Get available filter options (types, bedrooms, bathrooms, etc.)"
+          }
+        },
+        {
+          "name": "Get Property Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/statistics",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "statistics"]
+            },
+            "description": "Get general property market statistics"
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Features",
+      "item": [
+        {
+          "name": "Get User Preferences",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/preferences",
+              "host": ["{{base_url}}"],
+              "path": ["user", "preferences"]
+            },
+            "description": "Get user preferences and saved search criteria"
+          }
+        },
+        {
+          "name": "Update User Preferences",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"preferred_types\": [\"Villa\", \"Apartment\"],\n    \"preferred_locations\": [\"Tunis\", \"Sousse\"],\n    \"price_range\": {\n        \"min\": 100000,\n        \"max\": 500000\n    },\n    \"preferred_bedrooms\": [2, 3, 4],\n    \"notifications\": {\n        \"email\": true,\n        \"push\": false\n    }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/user/preferences",
+              "host": ["{{base_url}}"],
+              "path": ["user", "preferences"]
+            },
+            "description": "Update user search preferences and notification settings"
+          }
+        },
+        {
+          "name": "Get Recommendations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/recommendations?limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["user", "recommendations"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get personalized property recommendations based on user preferences"
+          }
+        },
+        {
+          "name": "Get User History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user/history?type=views&page=1",
+              "host": ["{{base_url}}"],
+              "path": ["user", "history"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "views"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get user activity history (views, searches, favorites). Type can be: views, searches, all"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Favorites",
+      "item": [
+        {
+          "name": "Get Favorites",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/favorites?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["favorites"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get user's favorite properties"
+          }
+        },
+        {
+          "name": "Add to Favorites",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"property_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/favorites",
+              "host": ["{{base_url}}"],
+              "path": ["favorites"]
+            },
+            "description": "Add a property to user's favorites"
+          }
+        },
+        {
+          "name": "Remove from Favorites",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/favorites/1",
+              "host": ["{{base_url}}"],
+              "path": ["favorites", "1"]
+            },
+            "description": "Remove a property from user's favorites"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Agency Features",
+      "item": [
+        {
+          "name": "Agency Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/agency/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["agency", "dashboard"]
+            },
+            "description": "Get agency dashboard with overview statistics and metrics"
+          }
+        },
+        {
+          "name": "Agency Analytics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/agency/analytics?period=last_month",
+              "host": ["{{base_url}}"],
+              "path": ["agency", "analytics"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "last_month"
+                }
+              ]
+            },
+            "description": "Get detailed agency analytics and performance metrics"
+          }
+        },
+        {
+          "name": "Get Agency Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/agency/profile",
+              "host": ["{{base_url}}"],
+              "path": ["agency", "profile"]
+            },
+            "description": "Get agency profile information"
+          }
+        },
+        {
+          "name": "Update Agency Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"company_name\": \"Updated Agency Name\",\n    \"website\": \"https://updated-agency.com\",\n    \"description\": \"Updated agency description\",\n    \"addresses\": [\n        {\n            \"type\": \"main\",\n            \"address\": \"123 Main St, Tunis\",\n            \"city\": \"Tunis\",\n            \"postal_code\": \"1000\"\n        }\n    ],\n    \"additional_phones\": [\"+21698765432\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/agency/profile",
+              "host": ["{{base_url}}"],
+              "path": ["agency", "profile"]
+            },
+            "description": "Update agency profile information"
+          }
+        },
+        {
+          "name": "Upload Agency Logo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "logo",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/agency/upload-logo",
+              "host": ["{{base_url}}"],
+              "path": ["agency", "upload-logo"]
+            },
+            "description": "Upload agency logo image"
+          }
+        },
+        {
+          "name": "Get Agency Properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/agency/properties?page=1&status=all",
+              "host": ["{{base_url}}"],
+              "path": ["agency", "properties"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "status",
+                  "value": "all"
+                }
+              ]
+            },
+            "description": "Get agency's properties with statistics and performance metrics"
+          }
+        },
+        {
+          "name": "Get Agency Leads",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/agency/leads?page=1&period=last_month",
+              "host": ["{{base_url}}"],
+              "path": ["agency", "leads"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "period",
+                  "value": "last_month"
+                }
+              ]
+            },
+            "description": "Get agency leads and potential customer interactions"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin Features",
+      "item": [
+        {
+          "name": "Admin Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "dashboard"]
+            },
+            "description": "Get admin dashboard with platform overview and statistics"
+          }
+        },
+        {
+          "name": "Admin Analytics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/analytics",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "analytics"]
+            },
+            "description": "Get comprehensive platform analytics and insights"
+          }
+        },
+        {
+          "name": "System Health Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/system-health",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "system-health"]
+            },
+            "description": "Get system health status and performance metrics"
+          }
+        },
+        {
+          "name": "Recent Activity",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/recent-activity",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "recent-activity"]
+            },
+            "description": "Get recent platform activity and user actions"
+          }
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get paginated list of all users"
+          }
+        },
+        {
+          "name": "User Management",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/user-management?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "user-management"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get detailed user management data with statistics"
+          }
+        },
+        {
+          "name": "Update User Role",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"user_type\": \"agency\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/users/1/role",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", "1", "role"]
+            },
+            "description": "Update user role/type. Options: regular_user, agency, admin"
+          }
+        },
+        {
+          "name": "Ban User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users/1/ban",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", "1", "ban"]
+            },
+            "description": "Ban a user from the platform"
+          }
+        },
+        {
+          "name": "Unban User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users/1/unban",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", "1", "unban"]
+            },
+            "description": "Unban a user from the platform"
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users", "1"]
+            },
+            "description": "Delete a user from the platform"
+          }
+        },
+        {
+          "name": "Get All Properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/properties?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "properties"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get paginated list of all properties"
+          }
+        },
+        {
+          "name": "Get Pending Properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/properties/pending?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "properties", "pending"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get properties pending validation"
+          }
+        },
+        {
+          "name": "Validate Property",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/properties/1/validate",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "properties", "1", "validate"]
+            },
+            "description": "Validate/approve a property"
+          }
+        },
+        {
+          "name": "Reject Property",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/properties/1/reject",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "properties", "1", "reject"]
+            },
+            "description": "Reject and delete a property"
+          }
+        },
+        {
+          "name": "Toggle Property Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/properties/1/toggle-status",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "properties", "1", "toggle-status"]
+            },
+            "description": "Toggle property active/inactive status"
+          }
+        },
+        {
+          "name": "Delete Property",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/properties/1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "properties", "1"]
+            },
+            "description": "Delete a property from the platform"
+          }
+        },
+        {
+          "name": "Agency Management",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/agencies?page=1",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "agencies"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get agency management data with statistics"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,654 @@
+{
+	"info": {
+		"_postman_id": "admin-workflow-fixed",
+		"name": "Nestify Admin Workflow - FIXED",
+		"description": "Complete admin workflow with proper token handling",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{admin_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Auto-set base URL if not set",
+					"if (!pm.collectionVariables.get('base_url')) {",
+					"    pm.collectionVariables.set('base_url', 'http://127.0.0.1:8000/api');",
+					"}"
+				]
+			}
+		}
+	],
+	"item": [
+		{
+			"name": "1. Authentication",
+			"item": [
+				{
+					"name": "Login as Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Save admin token automatically",
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    ",
+									"    // Save token to collection variable",
+									"    pm.collectionVariables.set('admin_token', jsonData.token);",
+									"    ",
+									"    // Save user info",
+									"    pm.collectionVariables.set('admin_id', jsonData.user.id);",
+									"    pm.collectionVariables.set('admin_email', jsonData.user.email);",
+									"    ",
+									"    console.log('✅ Admin token saved:', jsonData.token.substring(0, 20) + '...');",
+									"    console.log('✅ User type:', jsonData.user.user_type);",
+									"    console.log('✅ User ID:', jsonData.user.id);",
+									"    ",
+									"    pm.test('Login successful', function () {",
+									"        pm.response.to.have.status(200);",
+									"    });",
+									"    ",
+									"    pm.test('Token received', function () {",
+									"        pm.expect(jsonData.token).to.exist;",
+									"    });",
+									"    ",
+									"    pm.test('User is admin', function () {",
+									"        pm.expect(jsonData.user.user_type).to.equal('admin');",
+									"    });",
+									"} else {",
+									"    console.log('❌ Login failed:', pm.response.json());",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@nestify.tn\",\n    \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "Login as admin and automatically save token"
+					},
+					"response": []
+				},
+				{
+					"name": "Check Current User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    console.log('✅ Authenticated as:', jsonData.user.email);",
+									"    console.log('✅ User type:', jsonData.user.user_type);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user"
+							]
+						},
+						"description": "Verify that authentication token works"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints"
+		},
+		{
+			"name": "2. Admin Dashboard",
+			"item": [
+				{
+					"name": "Get Admin Dashboard",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    console.log('📊 Dashboard Stats:');",
+									"    console.log('Total Promoters:', jsonData.stats.total_promoters);",
+									"    console.log('Pending Promoters:', jsonData.stats.pending_promoters);",
+									"    console.log('Total Projects:', jsonData.stats.total_projects);",
+									"    console.log('Pending Projects:', jsonData.stats.pending_projects);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/dashboard",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"dashboard"
+							]
+						},
+						"description": "Get admin dashboard statistics"
+					},
+					"response": []
+				}
+			],
+			"description": "Admin dashboard endpoints"
+		},
+		{
+			"name": "3. Promoter Management",
+			"item": [
+				{
+					"name": "Get All Promoters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    console.log('📋 Total promoters:', jsonData.data.length);",
+									"    ",
+									"    // Save first promoter ID for testing",
+									"    if (jsonData.data.length > 0) {",
+									"        pm.collectionVariables.set('promoter_id', jsonData.data[0].id);",
+									"        console.log('✅ Saved promoter ID:', jsonData.data[0].id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/promoters",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"promoters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pending Promoters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/promoters?verified=false",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"promoters"
+							],
+							"query": [
+								{
+									"key": "verified",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Verified Promoters",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/promoters?verified=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"promoters"
+							],
+							"query": [
+								{
+									"key": "verified",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Promoter by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/promoters/{{promoter_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"promoters",
+								"{{promoter_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Promoter",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/promoters/{{promoter_id}}/verify",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"promoters",
+								"{{promoter_id}}",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reject Promoter",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rejection_reason\": \"Incomplete documentation\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/promoters/{{promoter_id}}/reject",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"promoters",
+								"{{promoter_id}}",
+								"reject"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Suspend Promoter",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"suspension_reason\": \"Policy violation\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/admin/promoters/{{promoter_id}}/suspend",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"promoters",
+								"{{promoter_id}}",
+								"suspend"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. Project Management",
+			"item": [
+				{
+					"name": "Get All Projects (Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    console.log('📋 Total projects:', jsonData.data.length);",
+									"    ",
+									"    // Save first project ID",
+									"    if (jsonData.data.length > 0) {",
+									"        pm.collectionVariables.set('project_id', jsonData.data[0].id);",
+									"        console.log('✅ Saved project ID:', jsonData.data[0].id);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/projects",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pending Projects",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/projects?is_published=false",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"projects"
+							],
+							"query": [
+								{
+									"key": "is_published",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Project by ID (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/projects/{{project_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"projects",
+								"{{project_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Publish Project",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/projects/{{project_id}}/publish",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"projects",
+								"{{project_id}}",
+								"publish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unpublish Project",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/projects/{{project_id}}/unpublish",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"projects",
+								"{{project_id}}",
+								"unpublish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Project",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/admin/projects/{{project_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"admin",
+								"projects",
+								"{{project_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "admin_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "admin_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "admin_email",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "promoter_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "project_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

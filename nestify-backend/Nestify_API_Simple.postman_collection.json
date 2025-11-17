@@ -1,0 +1,635 @@
+{
+  "info": {
+    "name": "Nestify Real Estate API - Simple",
+    "description": "Complete API collection for Nestify.tn - Tunisia's first PropTech marketplace",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "2.0.0"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "property_id",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 Authentication",
+      "item": [
+        {
+          "name": "Register Agency",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('token', response.token);",
+                  "    console.log('Agency registered successfully');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Test Agency\",\n    \"email\": \"agency@test.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"phone\": \"+216 12345678\",\n    \"user_type\": \"agency\",\n    \"company_name\": \"Test Real Estate\",\n    \"website\": \"https://test.com\",\n    \"description\": \"Test agency\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": ["{{base_url}}"],
+              "path": ["register"]
+            }
+          }
+        },
+        {
+          "name": "Login Agency",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('token', response.token);",
+                  "    console.log('Logged in successfully');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"contact@belkacem-immo.tn\",\n    \"password\": \"password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": ["{{base_url}}"],
+              "path": ["login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/user",
+              "host": ["{{base_url}}"],
+              "path": ["user"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🏠 Properties",
+      "item": [
+        {
+          "name": "Get All Properties",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.length > 0) {",
+                  "        pm.environment.set('property_id', response.data[0]._id.replace('nestify_', ''));",
+                  "        console.log('Found ' + response.data.length + ' properties');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties",
+              "host": ["{{base_url}}"],
+              "path": ["properties"]
+            }
+          }
+        },
+        {
+          "name": "Get Single Property",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/{{property_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "{{property_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Search Properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?search=appartement",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "appartement"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter by Price",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?min_price=100000&max_price=500000",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "min_price",
+                  "value": "100000"
+                },
+                {
+                  "key": "max_price",
+                  "value": "500000"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filter by Type",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties?type=Appartement",
+              "host": ["{{base_url}}"],
+              "path": ["properties"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "Appartement"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Property",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('new_property_id', response.property.id);",
+                  "    console.log('Property created successfully');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Appartement moderne à Tunis\",\n    \"description\": \"Magnifique appartement moderne\",\n    \"price\": 280000,\n    \"type\": \"Appartement\",\n    \"surface\": 95,\n    \"city\": \"Tunis\",\n    \"district\": \"Centre Ville\",\n    \"address\": \"Avenue Habib Bourguiba\",\n    \"latitude\": 36.8065,\n    \"longitude\": 10.1815,\n    \"rooms\": 4,\n    \"bedrooms\": 3,\n    \"bathrooms\": 2,\n    \"floor\": 3,\n    \"total_floors\": 8,\n    \"parking\": true,\n    \"elevator\": true,\n    \"terrace\": true,\n    \"garden\": false,\n    \"features\": [\"Climatisation\", \"Cuisine équipée\"],\n    \"is_vefa\": false,\n    \"images\": [\"https://via.placeholder.com/800x600\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/properties",
+              "host": ["{{base_url}}"],
+              "path": ["properties"]
+            }
+          }
+        },
+        {
+          "name": "Update Property",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Appartement moderne à Tunis - UPDATED\",\n    \"price\": 290000\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/properties/{{new_property_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "{{new_property_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Get My Properties",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/my-properties",
+              "host": ["{{base_url}}"],
+              "path": ["my-properties"]
+            }
+          }
+        },
+        {
+          "name": "Delete Property",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/{{new_property_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "{{new_property_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📊 Utility Endpoints",
+      "item": [
+        {
+          "name": "Get Filter Options",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/filter-options",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "filter-options"]
+            }
+          }
+        },
+        {
+          "name": "Get Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/statistics",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "statistics"]
+            }
+          }
+        },
+        {
+          "name": "Get Search Suggestions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/suggestions?query=sou",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "suggestions"],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "sou"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Locations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/properties/locations",
+              "host": ["{{base_url}}"],
+              "path": ["properties", "locations"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "❤️ Favorites",
+      "item": [
+        {
+          "name": "Get Favorites",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/favorites",
+              "host": ["{{base_url}}"],
+              "path": ["favorites"]
+            }
+          }
+        },
+        {
+          "name": "Add to Favorites",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"property_id\": \"{{property_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/favorites",
+              "host": ["{{base_url}}"],
+              "path": ["favorites"]
+            }
+          }
+        },
+        {
+          "name": "Toggle Favorite",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/favorites/{{property_id}}/toggle",
+              "host": ["{{base_url}}"],
+              "path": ["favorites", "{{property_id}}", "toggle"]
+            }
+          }
+        },
+        {
+          "name": "Check if Favorited",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/favorites/{{property_id}}/check",
+              "host": ["{{base_url}}"],
+              "path": ["favorites", "{{property_id}}", "check"]
+            }
+          }
+        },
+        {
+          "name": "Remove from Favorites",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/favorites/{{property_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["favorites", "{{property_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👑 Admin",
+      "item": [
+        {
+          "name": "Admin Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/dashboard",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "dashboard"]
+            }
+          }
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/users",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "users"]
+            }
+          }
+        },
+        {
+          "name": "Get All Properties (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/properties",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "properties"]
+            }
+          }
+        },
+        {
+          "name": "Toggle Property Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/properties/{{property_id}}/toggle-status",
+              "host": ["{{base_url}}"],
+              "path": ["admin", "properties", "{{property_id}}", "toggle-status"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "console.log('Making request to: ' + pm.request.url);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test('Response time is reasonable', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(10000);",
+          "});",
+          "",
+          "if (pm.response.code >= 400) {",
+          "    console.log('Error response:', pm.response.json());",
+          "}"
+        ]
+      }
+    }
+  ]
+}
+
+
