@@ -1,0 +1,1 @@
+export { default } from "file:///D:/oussema/Nestify_2.0/nestify-tn-design/Neuf_design/Homepage%20Design%20for%20Neuf.tn/node_modules/@nuxt/vite-builder/dist/runtime/client.manifest.mjs"
